@@ -1,0 +1,12 @@
+# Sekrety / zmienne środowiskowe
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Środowisko wirtualne
+.venv/
+
+# Wygenerowane przeglądy (PDF)
+inspections/

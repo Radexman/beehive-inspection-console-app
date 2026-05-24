@@ -1,0 +1,721 @@
+<style>
+	/* Using fonts already installed on Windows (Segoe UI + Consolas) — no remote @import */
+
+	:root {
+		--ink: #1a1a18;
+		--ink-light: #6b6b65;
+		--line: #c8c6bc;
+		--line-light: #e8e6de;
+		--fill: #f5f3ec;
+		--accent: #2d5a1b;
+		--accent-light: #e8f0e3;
+		--accent-mid: #5a8a3a;
+		--warn: #8a4a0a;
+		--warn-light: #fdf3e8;
+	}
+
+	* {
+		box-sizing: border-box;
+		margin: 0;
+		padding: 0;
+	}
+
+	body,
+	.sheet {
+		font-family: 'Segoe UI', sans-serif;
+		color: var(--ink);
+		background: white;
+	}
+
+	.sheet {
+		width: 100%;
+		max-width: 740px;
+		padding: 28px 32px 24px;
+		border: 1px solid var(--line);
+		border-radius: 6px;
+	}
+
+	.sheet-header {
+		display: flex;
+		align-items: flex-start;
+		justify-content: space-between;
+		border-bottom: 2px solid var(--accent);
+		padding-bottom: 10px;
+		margin-bottom: 16px;
+	}
+
+	.sheet-title {
+		font-size: 14px;
+		font-weight: 600;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--accent);
+		font-family: 'Consolas', monospace;
+	}
+
+	.apiary-data {
+		font-size: 11px;
+		color: var(--ink-light);
+		margin-top: 3px;
+		font-family: 'Consolas', monospace;
+	}
+
+	.sheet-meta {
+		display: flex;
+		gap: 20px;
+		font-size: 11px;
+		color: var(--ink-light);
+		font-family: 'Consolas', monospace;
+		align-items: flex-start;
+	}
+
+	.meta-field {
+		display: flex;
+		flex-direction: column;
+		gap: 3px;
+		align-items: flex-start;
+	}
+
+	.meta-field dt {
+		font-size: 9px;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-light);
+	}
+
+	.meta-field dd {
+		color: var(--ink);
+	}
+
+	.weather {
+		background: var(--fill);
+		border-radius: 5px;
+		padding: 10px 14px;
+		margin-bottom: 14px;
+	}
+
+	.weather-grid {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 6px 12px;
+	}
+
+	.weather-field {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 12px;
+	}
+
+	.weather-field dt {
+		font-size: 10px;
+		letter-spacing: 0.07em;
+		text-transform: uppercase;
+		color: var(--ink-light);
+		white-space: nowrap;
+		font-family: 'Consolas', monospace;
+	}
+
+	.weather-field dd {
+		flex: 1;
+		border-bottom: 1px solid var(--line);
+		min-height: 18px;
+	}
+
+	.section {
+		margin-bottom: 12px;
+	}
+
+	.section-head {
+		font-size: 9px;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--accent);
+		font-family: 'Consolas', monospace;
+		margin-bottom: 7px;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+	}
+
+	.section-head::after {
+		content: '';
+		flex: 1;
+		height: 1px;
+		background: var(--line-light);
+	}
+
+	.grid-2 {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 6px 16px;
+	}
+
+	.grid-3 {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr;
+		gap: 6px 12px;
+	}
+
+	.grid-4 {
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr;
+		gap: 6px 8px;
+	}
+
+	.check-group {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 10px;
+	}
+
+	.check-item {
+		display: flex;
+		align-items: center;
+		gap: 5px;
+		font-size: 12px;
+		white-space: nowrap;
+	}
+
+	.box {
+		width: 12px;
+		height: 12px;
+		border: 1px solid var(--line);
+		border-radius: 2px;
+		flex-shrink: 0;
+		display: inline-block;
+	}
+
+	.field-row {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 12px;
+	}
+
+	.field-row label {
+		font-size: 10px;
+		color: var(--ink-light);
+		white-space: nowrap;
+		min-width: 70px;
+		font-family: 'Consolas', monospace;
+		letter-spacing: 0.04em;
+	}
+
+	.line-input {
+		flex: 1;
+		border-bottom: 1px solid var(--line);
+		height: 18px;
+		min-width: 30px;
+	}
+
+	.rating-row {
+		display: flex;
+		align-items: center;
+		gap: 7px;
+		font-size: 12px;
+	}
+
+	.rating-row label {
+		font-size: 10px;
+		color: var(--ink-light);
+		min-width: 100px;
+		font-family: 'Consolas', monospace;
+		letter-spacing: 0.04em;
+	}
+
+	.rating-circles {
+		display: flex;
+		gap: 3px;
+	}
+
+	.dot {
+		width: 14px;
+		height: 14px;
+		border-radius: 50%;
+		border: 1px solid var(--line);
+		display: inline-block;
+	}
+
+	.dot-num {
+		font-size: 9px;
+		color: var(--ink-light);
+		font-family: 'Consolas', monospace;
+		align-self: center;
+		margin-left: 2px;
+	}
+
+	.alert-box {
+		background: var(--warn-light);
+		border: 1px solid #e8c090;
+		border-left: 3px solid var(--warn);
+		border-radius: 4px;
+		padding: 8px 12px;
+		margin-bottom: 12px;
+	}
+
+	.alert-head {
+		font-size: 9px;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--warn);
+		font-family: 'Consolas', monospace;
+		font-weight: 600;
+		margin-bottom: 6px;
+	}
+
+	.alert-box .check-group {
+		gap: 4px 12px;
+	}
+
+	.notes-area {
+		border: 1px solid var(--line);
+		border-radius: 4px;
+		padding: 8px 10px;
+		min-height: 52px;
+		background: var(--fill);
+	}
+
+	.notes-lines {
+		display: flex;
+		flex-direction: column;
+		gap: 9px;
+		margin-top: 4px;
+	}
+
+	.note-line {
+		border-bottom: 1px solid var(--line);
+		height: 1px;
+	}
+
+	.actions-row {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+
+	.action-item {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		font-size: 12px;
+	}
+
+	.action-label {
+		font-size: 10px;
+		color: var(--ink-light);
+		min-width: 130px;
+		font-family: 'Consolas', monospace;
+		letter-spacing: 0.04em;
+	}
+
+	.divider {
+		border: none;
+		border-top: 1px solid var(--line-light);
+		margin: 10px 0;
+	}
+
+	.footer {
+		display: flex;
+		justify-content: space-between;
+		align-items: flex-end;
+		border-top: 1px solid var(--line);
+		padding-top: 8px;
+		margin-top: 4px;
+		font-size: 9px;
+		color: var(--ink-light);
+		font-family: 'Consolas', monospace;
+		letter-spacing: 0.05em;
+	}
+
+	.next-field {
+		display: flex;
+		align-items: center;
+		gap: 6px;
+		font-size: 12px;
+	}
+
+	.next-field label {
+		font-size: 10px;
+		color: var(--ink-light);
+		font-family: 'Consolas', monospace;
+		letter-spacing: 0.04em;
+	}
+
+	@media print {
+		body {
+			background: white;
+		}
+		.sheet {
+			border: none;
+			max-width: 100%;
+			padding: 10px;
+		}
+		.no-print {
+			display: none;
+		}
+	}
+</style>
+
+<div class="sheet">
+	<!-- Nagłówek: dane pasieki, ula i przeglądu -->
+	<header class="sheet-header">
+		<div class="sheet-identity">
+			<h1 class="sheet-title">Protokół przeglądu rodziny pszczelej</h1>
+			<p class="apiary-data">{{ apiary_name }} · {{ beekeeper_name }} · WNI {{ veterinary_number }}</p>
+		</div>
+		<dl class="sheet-meta">
+			<div class="meta-field">
+				<dt>Ul nr</dt>
+				<dd>{{ hive_number }}</dd>
+			</div>
+			<div class="meta-field">
+				<dt>Przegląd nr</dt>
+				<dd>{{ inspection_number }}</dd>
+			</div>
+			<div class="meta-field">
+				<dt>Data</dt>
+				<dd>{{ inspection_date }}</dd>
+			</div>
+		</dl>
+	</header>
+
+	<!-- Aktualna pogoda (Open-Meteo) -->
+	<section class="weather" aria-label="Aktualna pogoda">
+		<dl class="weather-grid">
+			<div class="weather-field">
+				<dt>Temp. °C</dt>
+				<dd>{% if weather %}{{ weather.temp }}{% endif %}°C</dd>
+			</div>
+			<div class="weather-field">
+				<dt>Wilgotność</dt>
+				<dd>{% if weather %}{{ weather.humidity }}{% endif %}%</dd>
+			</div>
+			<div class="weather-field">
+				<dt>Wiatr</dt>
+				<dd>{% if weather %}{{ weather.wind }}{% endif %} km/h</dd>
+			</div>
+			<div class="weather-field">
+				<dt>Zachmurzenie</dt>
+				<dd>{% if weather %}{{ weather.cloud_cover }}{% endif %}%</dd>
+			</div>
+			<div class="weather-field">
+				<dt>Opady</dt>
+				<dd>{% if weather %}{{ weather.precipitation }}{% endif %} mm</dd>
+			</div>
+			<div class="weather-field">
+				<dt>Pogoda</dt>
+				<dd>{% if weather %}{{ weather.description }}{% endif %}</dd>
+			</div>
+		</dl>
+	</section>
+
+	<div class="section">
+		<div class="section-head">1 · Matka</div>
+		<div
+			class="grid-3"
+			style="gap: 6px 12px; margin-bottom: 8px"
+		>
+			<div class="check-item"><span class="box"></span> widziana</div>
+			<div class="check-item"><span class="box"></span> czerw potwierdzony</div>
+			<div class="check-item"><span class="box"></span> brak matki</div>
+		</div>
+		<div
+			class="grid-3"
+			style="gap: 6px 12px; margin-bottom: 6px"
+		>
+			<div class="check-item"><span class="box"></span> znakowana</div>
+			<div class="check-item">
+				<span class="box"></span> kolor:
+				<span
+					style="border-bottom: 1px solid var(--line); display: inline-block; width: 40px; margin-left: 3px"
+				></span>
+			</div>
+			<div class="check-item"><span class="box"></span> mleczko obecne</div>
+		</div>
+		<div class="field-row">
+			<label>Mateczniki</label>
+			<span
+				class="check-item"
+				style="margin-right: 10px"
+				><span class="box"></span> brak</span
+			>
+			<span
+				class="check-item"
+				style="margin-right: 10px"
+				><span class="box"></span> ratunkowe</span
+			>
+			<span
+				class="check-item"
+				style="margin-right: 10px"
+				><span class="box"></span> rojowe</span
+			>
+			<span style="font-size: 11px; color: var(--ink-light)">ile: </span>
+			<div
+				class="line-input"
+				style="max-width: 30px"
+			></div>
+		</div>
+	</div>
+
+	<div class="section">
+		<div class="section-head">2 · Czerw i plaster</div>
+		<div
+			class="grid-2"
+			style="margin-bottom: 8px"
+		>
+			<div>
+				<div
+					style="
+						font-size: 10px;
+						color: var(--ink-light);
+						margin-bottom: 5px;
+						font-family: 'Consolas', monospace;
+						letter-spacing: 0.05em;
+						text-transform: uppercase;
+					"
+				>
+					Typ czerwiu (zaznacz wszystkie)
+				</div>
+				<div class="check-group">
+					<div class="check-item"><span class="box"></span> otwarty</div>
+					<div class="check-item"><span class="box"></span> zasklepiony</div>
+					<div class="check-item"><span class="box"></span> jaja</div>
+					<div class="check-item"><span class="box"></span> larwy</div>
+				</div>
+			</div>
+			<div>
+				<div
+					style="
+						font-size: 10px;
+						color: var(--ink-light);
+						margin-bottom: 5px;
+						font-family: 'Consolas', monospace;
+						letter-spacing: 0.05em;
+						text-transform: uppercase;
+					"
+				>
+					Zwartość (okrągłość)
+				</div>
+				<div class="rating-row">
+					<div class="rating-circles">
+						<span class="dot"></span><span class="dot"></span><span class="dot"></span
+						><span class="dot"></span><span class="dot"></span>
+					</div>
+					<span class="dot-num">1 – 5</span>
+				</div>
+			</div>
+		</div>
+		<div class="grid-4">
+			<div class="field-row">
+				<label style="min-width: 60px">Ramek czerwiu</label>
+				<div
+					class="line-input"
+					style="max-width: 30px"
+				></div>
+			</div>
+			<div class="field-row">
+				<label style="min-width: 60px">Ramek plastra</label>
+				<div
+					class="line-input"
+					style="max-width: 30px"
+				></div>
+			</div>
+			<div class="field-row">
+				<label style="min-width: 60px">Ramek miodu</label>
+				<div
+					class="line-input"
+					style="max-width: 30px"
+				></div>
+			</div>
+			<div class="field-row">
+				<label style="min-width: 60px">Ramek pierzgi</label>
+				<div
+					class="line-input"
+					style="max-width: 30px"
+				></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="section">
+		<div class="section-head">3 · Siła rodziny</div>
+		<div class="grid-2">
+			<div>
+				<div
+					class="field-row"
+					style="margin-bottom: 5px"
+				>
+					<label>Obsiadane ramki</label>
+					<div
+						class="line-input"
+						style="max-width: 30px"
+					></div>
+					<span style="font-size: 11px; color: var(--ink-light); margin-left: 4px">/ 10</span>
+				</div>
+				<div class="rating-row">
+					<label>Ogólna siła</label>
+					<div class="rating-circles">
+						<span class="dot"></span><span class="dot"></span><span class="dot"></span
+						><span class="dot"></span><span class="dot"></span>
+					</div>
+					<span class="dot-num">1 – 5</span>
+				</div>
+			</div>
+			<div>
+				<div
+					style="
+						font-size: 10px;
+						color: var(--ink-light);
+						margin-bottom: 5px;
+						font-family: 'Consolas', monospace;
+						letter-spacing: 0.05em;
+						text-transform: uppercase;
+					"
+				>
+					Zachowanie pszczół
+				</div>
+				<div class="check-group">
+					<div class="check-item"><span class="box"></span> spokojne</div>
+					<div class="check-item"><span class="box"></span> nerwowe</div>
+					<div class="check-item"><span class="box"></span> agresywne</div>
+					<div class="check-item"><span class="box"></span> rojne</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="alert-box">
+		<div class="alert-head">⚠ Zdrowie – sygnały alarmowe</div>
+		<div class="check-group">
+			<div class="check-item"><span class="box"></span> deformacje skrzydeł (DWV)</div>
+			<div class="check-item"><span class="box"></span> czerw dziurkowany / zagnity</div>
+			<div class="check-item"><span class="box"></span> biegunka na denicy</div>
+			<div class="check-item"><span class="box"></span> roztocza Varroa widoczne</div>
+			<div class="check-item"><span class="box"></span> grzybica wapienna</div>
+			<div class="check-item"><span class="box"></span> pełzaczek pszczeli</div>
+			<div class="check-item"><span class="box"></span> woskowica/szkodniki plastra</div>
+			<div class="check-item"><span class="box"></span> brak sygnałów choroby</div>
+		</div>
+		<div
+			class="field-row"
+			style="margin-top: 6px"
+		>
+			<label>Osyp na dennicy</label>
+			<div class="line-input"></div>
+			<span style="font-size: 10px; color: var(--ink-light); margin-left: 6px"
+				>(Varroa / 24h, jeśli mierzony)</span
+			>
+		</div>
+	</div>
+
+	<div class="section">
+		<div class="section-head">4 · Zasoby i przestrzeń</div>
+		<div class="grid-2">
+			<div>
+				<div
+					style="
+						font-size: 10px;
+						color: var(--ink-light);
+						margin-bottom: 5px;
+						font-family: 'Consolas', monospace;
+						letter-spacing: 0.05em;
+						text-transform: uppercase;
+					"
+				>
+					Zapasy miodu
+				</div>
+				<div
+					class="check-group"
+					style="margin-bottom: 5px"
+				>
+					<div class="check-item"><span class="box"></span> wystarczające</div>
+					<div class="check-item"><span class="box"></span> małe</div>
+					<div class="check-item"><span class="box"></span> brak</div>
+				</div>
+				<div class="field-row">
+					<label>Szacunkowo</label>
+					<div
+						class="line-input"
+						style="max-width: 30px"
+					></div>
+					<span style="font-size: 11px; color: var(--ink-light); margin-left: 3px">kg</span>
+				</div>
+			</div>
+			<div>
+				<div
+					style="
+						font-size: 10px;
+						color: var(--ink-light);
+						margin-bottom: 5px;
+						font-family: 'Consolas', monospace;
+						letter-spacing: 0.05em;
+						text-transform: uppercase;
+					"
+				>
+					Przestrzeń w ulu
+				</div>
+				<div class="check-group">
+					<div class="check-item"><span class="box"></span> wystarczająca</div>
+					<div class="check-item"><span class="box"></span> ciasno – dokładam</div>
+					<div class="check-item"><span class="box"></span> za luźno</div>
+					<div class="check-item"><span class="box"></span> dodano nadstawkę</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="section">
+		<div class="section-head">5 · Wykonane działania</div>
+		<div class="actions-row">
+			<div class="action-item">
+				<span class="box"></span><span class="action-label">Dokarmianie</span>
+				<div class="line-input"></div>
+			</div>
+			<div class="action-item">
+				<span class="box"></span><span class="action-label">Leczenie (preparat)</span>
+				<div class="line-input"></div>
+			</div>
+			<div class="action-item">
+				<span class="box"></span><span class="action-label">Wymiana plastrów</span>
+				<div class="line-input"></div>
+			</div>
+			<div class="action-item">
+				<span class="box"></span><span class="action-label">Odsklepowanie miodu</span>
+				<div class="line-input"></div>
+			</div>
+			<div class="action-item">
+				<span class="box"></span><span class="action-label">Inne</span>
+				<div class="line-input"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="section">
+		<div class="section-head">6 · Uwagi / notatki swobodne</div>
+		<div class="notes-area">
+			<div class="notes-lines">
+				<div class="note-line"></div>
+				<div class="note-line"></div>
+				<div class="note-line"></div>
+			</div>
+		</div>
+	</div>
+
+	<div class="footer">
+		<div class="next-field">
+			<label>Następny przegląd:</label>
+			<div
+				style="
+					border-bottom: 1px solid var(--line);
+					width: 100px;
+					height: 16px;
+					display: inline-block;
+					margin-left: 6px;
+				"
+			></div>
+		</div>
+		<div>wersja 1.0 · {{ apiary_name }}</div>
+	</div>
+</div>
