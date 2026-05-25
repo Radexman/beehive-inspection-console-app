@@ -128,6 +128,75 @@ def get_weather(lat: float, lon: float) -> dict | None:
     }
 
 
+# ── dane matki (sekcja 1 · Matka) ─────────────────────────────────────────────
+def collect_queen() -> dict:
+    """Zbierz dane o matce zgodne z DTO sekcji 1 szablonu."""
+    queen_status = questionary.select(
+        "Status matki:",
+        choices=[
+            questionary.Choice("Widziana", value="seen"),
+            questionary.Choice("Niewidziana, czerw OK", value="not_seen_brood_ok"),
+            questionary.Choice("Brak matki", value="missing"),
+        ],
+    ).ask()
+
+    queen_marked = questionary.confirm("Matka znakowana?", default=False).ask()
+    queen_marker_color = ""
+    if queen_marked:
+        year_color = {
+            "1": "white",
+            "6": "white",
+            "2": "yellow",
+            "7": "yellow",
+            "3": "red",
+            "8": "red",
+            "4": "green",
+            "9": "green",
+            "5": "blue",
+            "0": "blue",
+        }
+        suggested = year_color[str(date.today().year)[-1]]
+        queen_marker_color = questionary.select(
+            "Kolor znakowania (wg ostatniej cyfry roku):",
+            choices=[
+                questionary.Choice("Biały (1, 6)", value="white"),
+                questionary.Choice("Żółty (2, 7)", value="yellow"),
+                questionary.Choice("Czerwony (3, 8)", value="red"),
+                questionary.Choice("Zielony (4, 9)", value="green"),
+                questionary.Choice("Niebieski (5, 0)", value="blue"),
+            ],
+            default=suggested,
+        ).ask()
+
+    queen_cells = questionary.select(
+        "Mateczniki:",
+        choices=[
+            questionary.Choice("Brak", value="none"),
+            questionary.Choice("Ratunkowe", value="emergency"),
+            questionary.Choice("Rojowe", value="swarm"),
+            questionary.Choice("Cicha wymiana", value="supersedure"),
+        ],
+    ).ask()
+
+    queen_cells_count = 0
+    if queen_cells != "none":
+        queen_cells_count = int(
+            questionary.text(
+                "Liczba mateczników:",
+                default="0",
+                validate=lambda t: t.isdigit() or "Podaj liczbę całkowitą, np. 2",
+            ).ask()
+        )
+
+    return {
+        "queen_status": queen_status,
+        "queen_marked": queen_marked,
+        "queen_marker_color": queen_marker_color,
+        "queen_cells": queen_cells,
+        "queen_cells_count": queen_cells_count,
+    }
+
+
 # ── 1 · nowy przegląd (PDF) ────────────────────────────────────────────────────
 def new_inspection() -> None:
     """Wygeneruj PDF przeglądu na podstawie zapisanego profilu."""
@@ -145,7 +214,9 @@ def new_inspection() -> None:
     today = date.today().strftime("%Y-%m-%d")
     template = env.get_template("template.html")
 
+    hive_number = questionary.text("Podaj numer ula:").ask()
     inspection_number = questionary.text("Podaj numer inspekcji:").ask()
+    queen = collect_queen()
 
     html_filled = template.render(
         apiary_name=profile["apiary_name"],
@@ -153,10 +224,14 @@ def new_inspection() -> None:
         veterinary_number=profile["veterinary_number"],
         location=location,
         weather=weather,
+        hive_number=hive_number,
         inspection_number=inspection_number,
+        inspection_date=today,
+        queen=queen,
     )
 
-    filename = f"Przegląd - {profile['apiary_name']} - {today}.pdf"
+    # filename = f"Przegląd - {profile['apiary_name']} - {today}.pdf"
+    filename = f"{profile['apiary_name']}-Ul-{hive_number}-Przegląd-{inspection_number}-{today}.pdf"
     INSPECTIONS_DIR.mkdir(parents=True, exist_ok=True)
     output_path = INSPECTIONS_DIR / filename
 
@@ -180,7 +255,7 @@ def main() -> None:
             new_inspection()
         elif action == "Aktualizuj dane użytkownika":
             update_user_data()
-        else:  # "Wyjście" albo przerwanie (Ctrl+C / None)
+        else:
             print("Do zobaczenia! 🐝")
             break
 

@@ -1,10 +1,10 @@
 {
-  "beekeeper_name": "Jan Kowalski",
-  "apiary_name": "Pasieka Jana",
-  "veterinary_number": "243521343",
+  "beekeeper_name": "Radosław Siek",
+  "apiary_name": "Pasieka Sieka",
+  "veterinary_number": "160947166",
   "location": {
-    "lat": 52.23,
-    "lon": 21.0,
+    "lat": 50.69,
+    "lon": 18.03,
     "label": "Leśnictwo Zawada"
   }
 }

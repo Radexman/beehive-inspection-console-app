@@ -39,9 +39,14 @@
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-between;
+		gap: 24px;
 		border-bottom: 2px solid var(--accent);
 		padding-bottom: 10px;
 		margin-bottom: 16px;
+	}
+
+	.sheet-identity {
+		min-width: 0;
 	}
 
 	.sheet-title {
@@ -62,7 +67,9 @@
 
 	.sheet-meta {
 		display: flex;
-		gap: 20px;
+		gap: 3em;
+		margin-right: 3em;
+		flex-shrink: 0;
 		font-size: 11px;
 		color: var(--ink-light);
 		font-family: 'Consolas', monospace;
@@ -117,6 +124,12 @@
 	}
 
 	.weather-field dd {
+		flex: 1;
+		border-bottom: 1px solid var(--line);
+		min-height: 18px;
+	}
+
+	.meta-field dd {
 		flex: 1;
 		border-bottom: 1px solid var(--line);
 		min-height: 18px;
@@ -185,6 +198,63 @@
 		border-radius: 2px;
 		flex-shrink: 0;
 		display: inline-block;
+	}
+
+	.box.checked {
+		background: var(--accent);
+		border-color: var(--accent);
+		color: #fff;
+		font-size: 9px;
+		line-height: 10px;
+		text-align: center;
+	}
+
+	.box.checked::after {
+		content: '✓';
+	}
+
+	/* Sekcja 1 · Matka — widok danych (DTO) */
+	.queen {
+		display: flex;
+		flex-direction: column;
+		gap: 9px;
+	}
+
+	.queen-row {
+		display: flex;
+		align-items: baseline;
+		gap: 12px;
+	}
+
+	.queen-row > dt {
+		flex: 0 0 92px;
+		font-size: 10px;
+		letter-spacing: 0.05em;
+		text-transform: uppercase;
+		color: var(--ink-light);
+		font-family: 'Consolas', monospace;
+	}
+
+	.queen-row > dd {
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		gap: 16px;
+		font-size: 12px;
+	}
+
+	.queen-row > dd > * {
+		flex-shrink: 0;
+	}
+
+	.queen-meta {
+		white-space: nowrap;
+		color: var(--ink-light);
+	}
+
+	.queen-meta strong {
+		color: var(--ink);
+		font-weight: 600;
 	}
 
 	.field-row {
@@ -382,7 +452,10 @@
 	</header>
 
 	<!-- Aktualna pogoda (Open-Meteo) -->
-	<section class="weather" aria-label="Aktualna pogoda">
+	<section
+		class="weather"
+		aria-label="Aktualna pogoda"
+	>
 		<dl class="weather-grid">
 			<div class="weather-field">
 				<dt>Temp. °C</dt>
@@ -411,53 +484,73 @@
 		</dl>
 	</section>
 
-	<div class="section">
-		<div class="section-head">1 · Matka</div>
-		<div
-			class="grid-3"
-			style="gap: 6px 12px; margin-bottom: 8px"
+	<section
+		class="section"
+		aria-labelledby="sec-matka"
+	>
+		<h2
+			class="section-head"
+			id="sec-matka"
 		>
-			<div class="check-item"><span class="box"></span> widziana</div>
-			<div class="check-item"><span class="box"></span> czerw potwierdzony</div>
-			<div class="check-item"><span class="box"></span> brak matki</div>
-		</div>
-		<div
-			class="grid-3"
-			style="gap: 6px 12px; margin-bottom: 6px"
-		>
-			<div class="check-item"><span class="box"></span> znakowana</div>
-			<div class="check-item">
-				<span class="box"></span> kolor:
-				<span
-					style="border-bottom: 1px solid var(--line); display: inline-block; width: 40px; margin-left: 3px"
-				></span>
+			1 · Matka
+		</h2>
+		<dl class="queen">
+			<div class="queen-row">
+				<dt>Status</dt>
+				<dd>
+					<span class="check-item"
+						><span class="box {% if queen.queen_status == 'seen' %}checked{% endif %}"></span>
+						widziana</span
+					>
+					<span class="check-item"
+						><span class="box {% if queen.queen_status == 'not_seen_brood_ok' %}checked{% endif %}"></span>
+						niewidziana, czerw OK</span
+					>
+					<span class="check-item"
+						><span class="box {% if queen.queen_status == 'missing' %}checked{% endif %}"></span> brak
+						matki</span
+					>
+				</dd>
 			</div>
-			<div class="check-item"><span class="box"></span> mleczko obecne</div>
-		</div>
-		<div class="field-row">
-			<label>Mateczniki</label>
-			<span
-				class="check-item"
-				style="margin-right: 10px"
-				><span class="box"></span> brak</span
-			>
-			<span
-				class="check-item"
-				style="margin-right: 10px"
-				><span class="box"></span> ratunkowe</span
-			>
-			<span
-				class="check-item"
-				style="margin-right: 10px"
-				><span class="box"></span> rojowe</span
-			>
-			<span style="font-size: 11px; color: var(--ink-light)">ile: </span>
-			<div
-				class="line-input"
-				style="max-width: 30px"
-			></div>
-		</div>
-	</div>
+			<div class="queen-row">
+				<dt>Znakowanie</dt>
+				<dd>
+					<span class="check-item"
+						><span class="box {% if queen.queen_marked %}checked{% endif %}"></span> znakowana</span
+					>
+					{% if queen.queen_marked and queen.queen_marker_color %} {% set color_pl = {'white': 'biały',
+					'yellow': 'żółty', 'red': 'czerwony', 'green': 'zielony', 'blue': 'niebieski'} %}
+					<span class="queen-meta"
+						>kolor:
+						<strong>{{ color_pl.get(queen.queen_marker_color, queen.queen_marker_color) }}</strong></span
+					>
+					{% endif %}
+				</dd>
+			</div>
+			<div class="queen-row">
+				<dt>Mateczniki</dt>
+				<dd>
+					<span class="check-item"
+						><span class="box {% if queen.queen_cells == 'none' %}checked{% endif %}"></span> brak</span
+					>
+					<span class="check-item"
+						><span class="box {% if queen.queen_cells == 'emergency' %}checked{% endif %}"></span>
+						ratunkowe</span
+					>
+					<span class="check-item"
+						><span class="box {% if queen.queen_cells == 'swarm' %}checked{% endif %}"></span> rojowe</span
+					>
+					<span class="check-item"
+						><span class="box {% if queen.queen_cells == 'supersedure' %}checked{% endif %}"></span> cicha
+						wymiana</span
+					>
+					{% if queen.queen_cells != 'none' %}
+					<span class="queen-meta">liczba: <strong>{{ queen.queen_cells_count }}</strong></span>
+					{% endif %}
+				</dd>
+			</div>
+		</dl>
+	</section>
 
 	<div class="section">
 		<div class="section-head">2 · Czerw i plaster</div>
