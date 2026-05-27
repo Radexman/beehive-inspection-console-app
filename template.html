@@ -213,20 +213,20 @@
 		content: '✓';
 	}
 
-	/* Sekcja 1 · Matka — widok danych (DTO) */
-	.queen {
+	/* Reusable label/value rows — shared by sekcja 1 (Matka), 2 (Czerw) … */
+	.rows {
 		display: flex;
 		flex-direction: column;
 		gap: 9px;
 	}
 
-	.queen-row {
+	.row {
 		display: flex;
 		align-items: baseline;
 		gap: 12px;
 	}
 
-	.queen-row > dt {
+	.row > dt {
 		flex: 0 0 92px;
 		font-size: 10px;
 		letter-spacing: 0.05em;
@@ -235,7 +235,7 @@
 		font-family: 'Consolas', monospace;
 	}
 
-	.queen-row > dd {
+	.row > dd {
 		display: flex;
 		flex-wrap: nowrap;
 		align-items: center;
@@ -243,16 +243,16 @@
 		font-size: 12px;
 	}
 
-	.queen-row > dd > * {
+	.row > dd > * {
 		flex-shrink: 0;
 	}
 
-	.queen-meta {
+	.row-meta {
 		white-space: nowrap;
 		color: var(--ink-light);
 	}
 
-	.queen-meta strong {
+	.row-meta strong {
 		color: var(--ink);
 		font-weight: 600;
 	}
@@ -306,6 +306,11 @@
 		border-radius: 50%;
 		border: 1px solid var(--line);
 		display: inline-block;
+	}
+
+	.dot.filled {
+		background: var(--accent);
+		border-color: var(--accent);
 	}
 
 	.dot-num {
@@ -484,6 +489,7 @@
 		</dl>
 	</section>
 
+	<!-- Przegląd: Matka Pszczela -->
 	<section
 		class="section"
 		aria-labelledby="sec-matka"
@@ -494,8 +500,8 @@
 		>
 			1 · Matka
 		</h2>
-		<dl class="queen">
-			<div class="queen-row">
+		<dl class="rows">
+			<div class="row">
 				<dt>Status</dt>
 				<dd>
 					<span class="check-item"
@@ -512,7 +518,7 @@
 					>
 				</dd>
 			</div>
-			<div class="queen-row">
+			<div class="row">
 				<dt>Znakowanie</dt>
 				<dd>
 					<span class="check-item"
@@ -520,14 +526,14 @@
 					>
 					{% if queen.queen_marked and queen.queen_marker_color %} {% set color_pl = {'white': 'biały',
 					'yellow': 'żółty', 'red': 'czerwony', 'green': 'zielony', 'blue': 'niebieski'} %}
-					<span class="queen-meta"
+					<span class="row-meta"
 						>kolor:
 						<strong>{{ color_pl.get(queen.queen_marker_color, queen.queen_marker_color) }}</strong></span
 					>
 					{% endif %}
 				</dd>
 			</div>
-			<div class="queen-row">
+			<div class="row">
 				<dt>Mateczniki</dt>
 				<dd>
 					<span class="check-item"
@@ -545,92 +551,56 @@
 						wymiana</span
 					>
 					{% if queen.queen_cells != 'none' %}
-					<span class="queen-meta">liczba: <strong>{{ queen.queen_cells_count }}</strong></span>
+					<span class="row-meta">liczba: <strong>{{ queen.queen_cells_count }}</strong></span>
 					{% endif %}
 				</dd>
 			</div>
 		</dl>
 	</section>
 
-	<div class="section">
-		<div class="section-head">2 · Czerw i plaster</div>
-		<div
-			class="grid-2"
-			style="margin-bottom: 8px"
+	<!-- Przegląd: Czerw -->
+	<section
+		class="section"
+		aria-labelledby="sec-czerw"
+	>
+		<h2
+			class="section-head"
+			id="sec-czerw"
 		>
-			<div>
-				<div
-					style="
-						font-size: 10px;
-						color: var(--ink-light);
-						margin-bottom: 5px;
-						font-family: 'Consolas', monospace;
-						letter-spacing: 0.05em;
-						text-transform: uppercase;
-					"
-				>
-					Typ czerwiu (zaznacz wszystkie)
-				</div>
-				<div class="check-group">
-					<div class="check-item"><span class="box"></span> otwarty</div>
-					<div class="check-item"><span class="box"></span> zasklepiony</div>
-					<div class="check-item"><span class="box"></span> jaja</div>
-					<div class="check-item"><span class="box"></span> larwy</div>
-				</div>
+			2 · Czerw
+		</h2>
+		<dl class="rows">
+			<div class="row">
+				<dt>Rodzaj</dt>
+				<dd>
+					<span class="check-item"
+						><span class="box {% if brood.brood_eggs %}checked{% endif %}"></span> jaja</span
+					>
+					<span class="check-item"
+						><span class="box {% if brood.brood_open %}checked{% endif %}"></span> otwarty
+						(larwy)</span
+					>
+					<span class="check-item"
+						><span class="box {% if brood.brood_capped %}checked{% endif %}"></span> kryty</span
+					>
+					<span class="check-item"
+						><span class="box {% if brood.brood_drone %}checked{% endif %}"></span> trutowy</span
+					>
+				</dd>
 			</div>
-			<div>
-				<div
-					style="
-						font-size: 10px;
-						color: var(--ink-light);
-						margin-bottom: 5px;
-						font-family: 'Consolas', monospace;
-						letter-spacing: 0.05em;
-						text-transform: uppercase;
-					"
-				>
-					Zwartość (okrągłość)
-				</div>
-				<div class="rating-row">
-					<div class="rating-circles">
-						<span class="dot"></span><span class="dot"></span><span class="dot"></span
-						><span class="dot"></span><span class="dot"></span>
-					</div>
-					<span class="dot-num">1 – 5</span>
-				</div>
+			<div class="row">
+				<dt>Zwartość</dt>
+				<dd>
+					<span class="rating-circles"
+						>{% for i in range(1, 6) %}<span
+							class="dot {% if brood.brood_pattern >= i %}filled{% endif %}"
+						></span>{% endfor %}</span
+					>
+					<span class="dot-num">{{ brood.brood_pattern }} / 5</span>
+				</dd>
 			</div>
-		</div>
-		<div class="grid-4">
-			<div class="field-row">
-				<label style="min-width: 60px">Ramek czerwiu</label>
-				<div
-					class="line-input"
-					style="max-width: 30px"
-				></div>
-			</div>
-			<div class="field-row">
-				<label style="min-width: 60px">Ramek plastra</label>
-				<div
-					class="line-input"
-					style="max-width: 30px"
-				></div>
-			</div>
-			<div class="field-row">
-				<label style="min-width: 60px">Ramek miodu</label>
-				<div
-					class="line-input"
-					style="max-width: 30px"
-				></div>
-			</div>
-			<div class="field-row">
-				<label style="min-width: 60px">Ramek pierzgi</label>
-				<div
-					class="line-input"
-					style="max-width: 30px"
-				></div>
-			</div>
-		</div>
-	</div>
+		</dl>
+	</section>
 
 	<div class="section">
 		<div class="section-head">3 · Siła rodziny</div>

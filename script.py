@@ -197,6 +197,34 @@ def collect_queen() -> dict:
     }
 
 
+# ── dane czerwiu (sekcja 2 · Czerw) ────────────────────────────────────────────
+def collect_brood() -> dict:
+    """Zbierz dane o czerwiu zgodne z DTO sekcji 2 szablonu."""
+    brood_eggs = questionary.confirm(
+        "Jaja (potwierdza matkę z ostatnich 3 dni)?", default=False
+    ).ask()
+    brood_open = questionary.confirm("Czerw otwarty (larwy)?", default=False).ask()
+    brood_capped = questionary.confirm(
+        "Czerw kryty (zasklepiony)?", default=False
+    ).ask()
+    brood_drone = questionary.confirm("Czerw trutowy?", default=False).ask()
+    brood_pattern = int(
+        questionary.select(
+            "Zwartość czerwiu (1–5):",
+            choices=["1", "2", "3", "4", "5"],
+            default="3",
+        ).ask()
+    )
+
+    return {
+        "brood_eggs": brood_eggs,
+        "brood_open": brood_open,
+        "brood_capped": brood_capped,
+        "brood_drone": brood_drone,
+        "brood_pattern": brood_pattern,
+    }
+
+
 # ── 1 · nowy przegląd (PDF) ────────────────────────────────────────────────────
 def new_inspection() -> None:
     """Wygeneruj PDF przeglądu na podstawie zapisanego profilu."""
@@ -217,6 +245,7 @@ def new_inspection() -> None:
     hive_number = questionary.text("Podaj numer ula:").ask()
     inspection_number = questionary.text("Podaj numer inspekcji:").ask()
     queen = collect_queen()
+    brood = collect_brood()
 
     html_filled = template.render(
         apiary_name=profile["apiary_name"],
@@ -228,6 +257,7 @@ def new_inspection() -> None:
         inspection_number=inspection_number,
         inspection_date=today,
         queen=queen,
+        brood=brood,
     )
 
     # filename = f"Przegląd - {profile['apiary_name']} - {today}.pdf"
