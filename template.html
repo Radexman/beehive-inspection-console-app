@@ -1,6 +1,4 @@
 <style>
-	/* Using fonts already installed on Windows (Segoe UI + Consolas) — no remote @import */
-
 	:root {
 		--ink: #1a1a18;
 		--ink-light: #6b6b65;
@@ -8,8 +6,6 @@
 		--line-light: #e8e6de;
 		--fill: #f5f3ec;
 		--accent: #2d5a1b;
-		--accent-light: #e8f0e3;
-		--accent-mid: #5a8a3a;
 		--warn: #8a4a0a;
 		--warn-light: #fdf3e8;
 	}
@@ -35,6 +31,44 @@
 		border-radius: 6px;
 	}
 
+	.sheet-title,
+	.apiary-data,
+	.sheet-meta,
+	.section-head,
+	.alert-head,
+	.weather-field dt,
+	.row > dt,
+	.field-row label,
+	.action-label,
+	.dot-num,
+	.next-field label,
+	.footer {
+		font-family: 'Consolas', monospace;
+	}
+
+	.apiary-data,
+	.sheet-meta,
+	.meta-field dt,
+	.weather-field dt,
+	.row > dt,
+	.row-meta,
+	.field-row label,
+	.action-label,
+	.dot-num,
+	.next-field label,
+	.unit,
+	.footer {
+		color: var(--ink-light);
+	}
+
+	.section-head,
+	.alert-head,
+	.meta-field dt,
+	.weather-field dt,
+	.row > dt {
+		text-transform: uppercase;
+	}
+
 	.sheet-header {
 		display: flex;
 		align-items: flex-start;
@@ -55,25 +89,20 @@
 		letter-spacing: 0.12em;
 		text-transform: uppercase;
 		color: var(--accent);
-		font-family: 'Consolas', monospace;
 	}
 
 	.apiary-data {
 		font-size: 11px;
-		color: var(--ink-light);
 		margin-top: 3px;
-		font-family: 'Consolas', monospace;
 	}
 
 	.sheet-meta {
 		display: flex;
+		align-items: flex-start;
 		gap: 3em;
 		margin-right: 3em;
 		flex-shrink: 0;
 		font-size: 11px;
-		color: var(--ink-light);
-		font-family: 'Consolas', monospace;
-		align-items: flex-start;
 	}
 
 	.meta-field {
@@ -86,8 +115,6 @@
 	.meta-field dt {
 		font-size: 9px;
 		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--ink-light);
 	}
 
 	.meta-field dd {
@@ -117,19 +144,11 @@
 	.weather-field dt {
 		font-size: 10px;
 		letter-spacing: 0.07em;
-		text-transform: uppercase;
-		color: var(--ink-light);
 		white-space: nowrap;
-		font-family: 'Consolas', monospace;
 	}
 
+	.meta-field dd,
 	.weather-field dd {
-		flex: 1;
-		border-bottom: 1px solid var(--line);
-		min-height: 18px;
-	}
-
-	.meta-field dd {
 		flex: 1;
 		border-bottom: 1px solid var(--line);
 		min-height: 18px;
@@ -140,16 +159,14 @@
 	}
 
 	.section-head {
-		font-size: 9px;
-		font-weight: 600;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--accent);
-		font-family: 'Consolas', monospace;
-		margin-bottom: 7px;
 		display: flex;
 		align-items: center;
 		gap: 6px;
+		font-size: 9px;
+		font-weight: 600;
+		letter-spacing: 0.14em;
+		color: var(--accent);
+		margin-bottom: 7px;
 	}
 
 	.section-head::after {
@@ -157,24 +174,6 @@
 		flex: 1;
 		height: 1px;
 		background: var(--line-light);
-	}
-
-	.grid-2 {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 6px 16px;
-	}
-
-	.grid-3 {
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr;
-		gap: 6px 12px;
-	}
-
-	.grid-4 {
-		display: grid;
-		grid-template-columns: 1fr 1fr 1fr 1fr;
-		gap: 6px 8px;
 	}
 
 	.check-group {
@@ -213,7 +212,6 @@
 		content: '✓';
 	}
 
-	/* Reusable label/value rows — shared by sekcja 1 (Matka), 2 (Czerw) … */
 	.rows {
 		display: flex;
 		flex-direction: column;
@@ -230,9 +228,6 @@
 		flex: 0 0 92px;
 		font-size: 10px;
 		letter-spacing: 0.05em;
-		text-transform: uppercase;
-		color: var(--ink-light);
-		font-family: 'Consolas', monospace;
 	}
 
 	.row > dd {
@@ -249,7 +244,6 @@
 
 	.row-meta {
 		white-space: nowrap;
-		color: var(--ink-light);
 	}
 
 	.row-meta strong {
@@ -266,11 +260,9 @@
 
 	.field-row label {
 		font-size: 10px;
-		color: var(--ink-light);
+		letter-spacing: 0.04em;
 		white-space: nowrap;
 		min-width: 70px;
-		font-family: 'Consolas', monospace;
-		letter-spacing: 0.04em;
 	}
 
 	.line-input {
@@ -280,19 +272,18 @@
 		min-width: 30px;
 	}
 
-	.rating-row {
-		display: flex;
-		align-items: center;
-		gap: 7px;
-		font-size: 12px;
+	.unit {
+		font-size: 10px;
+		margin-left: 4px;
 	}
 
-	.rating-row label {
-		font-size: 10px;
-		color: var(--ink-light);
-		min-width: 100px;
-		font-family: 'Consolas', monospace;
-		letter-spacing: 0.04em;
+	/* Collected value sitting on a fill-in underline (also writable by hand) */
+	.fill-value {
+		display: inline-block;
+		min-width: 24px;
+		border-bottom: 1px solid var(--line);
+		text-align: center;
+		color: var(--ink);
 	}
 
 	.rating-circles {
@@ -315,8 +306,6 @@
 
 	.dot-num {
 		font-size: 9px;
-		color: var(--ink-light);
-		font-family: 'Consolas', monospace;
 		align-self: center;
 		margin-left: 2px;
 	}
@@ -333,15 +322,17 @@
 	.alert-head {
 		font-size: 9px;
 		letter-spacing: 0.12em;
-		text-transform: uppercase;
 		color: var(--warn);
-		font-family: 'Consolas', monospace;
 		font-weight: 600;
 		margin-bottom: 6px;
 	}
 
 	.alert-box .check-group {
 		gap: 4px 12px;
+	}
+
+	.alert-box .field-row {
+		margin-top: 6px;
 	}
 
 	.notes-area {
@@ -379,16 +370,8 @@
 
 	.action-label {
 		font-size: 10px;
-		color: var(--ink-light);
-		min-width: 130px;
-		font-family: 'Consolas', monospace;
 		letter-spacing: 0.04em;
-	}
-
-	.divider {
-		border: none;
-		border-top: 1px solid var(--line-light);
-		margin: 10px 0;
+		min-width: 130px;
 	}
 
 	.footer {
@@ -399,8 +382,6 @@
 		padding-top: 8px;
 		margin-top: 4px;
 		font-size: 9px;
-		color: var(--ink-light);
-		font-family: 'Consolas', monospace;
 		letter-spacing: 0.05em;
 	}
 
@@ -413,9 +394,13 @@
 
 	.next-field label {
 		font-size: 10px;
-		color: var(--ink-light);
-		font-family: 'Consolas', monospace;
 		letter-spacing: 0.04em;
+	}
+
+	.next-field .line-input {
+		flex: none;
+		width: 100px;
+		height: 16px;
 	}
 
 	@media print {
@@ -426,9 +411,6 @@
 			border: none;
 			max-width: 100%;
 			padding: 10px;
-		}
-		.no-print {
-			display: none;
 		}
 	}
 </style>
@@ -577,8 +559,7 @@
 						><span class="box {% if brood.brood_eggs %}checked{% endif %}"></span> jaja</span
 					>
 					<span class="check-item"
-						><span class="box {% if brood.brood_open %}checked{% endif %}"></span> otwarty
-						(larwy)</span
+						><span class="box {% if brood.brood_open %}checked{% endif %}"></span> otwarty (larwy)</span
 					>
 					<span class="check-item"
 						><span class="box {% if brood.brood_capped %}checked{% endif %}"></span> kryty</span
@@ -594,7 +575,8 @@
 					<span class="rating-circles"
 						>{% for i in range(1, 6) %}<span
 							class="dot {% if brood.brood_pattern >= i %}filled{% endif %}"
-						></span>{% endfor %}</span
+						></span
+						>{% endfor %}</span
 					>
 					<span class="dot-num">{{ brood.brood_pattern }} / 5</span>
 				</dd>
@@ -602,52 +584,39 @@
 		</dl>
 	</section>
 
-	<div class="section">
-		<div class="section-head">3 · Siła rodziny</div>
-		<div class="grid-2">
-			<div>
-				<div
-					class="field-row"
-					style="margin-bottom: 5px"
-				>
-					<label>Obsiadane ramki</label>
-					<div
-						class="line-input"
-						style="max-width: 30px"
-					></div>
-					<span style="font-size: 11px; color: var(--ink-light); margin-left: 4px">/ 10</span>
-				</div>
-				<div class="rating-row">
-					<label>Ogólna siła</label>
-					<div class="rating-circles">
-						<span class="dot"></span><span class="dot"></span><span class="dot"></span
-						><span class="dot"></span><span class="dot"></span>
-					</div>
-					<span class="dot-num">1 – 5</span>
-				</div>
+	<!-- Przegląd: Plastry i zasoby -->
+	<section
+		class="section"
+		aria-labelledby="sec-plastry"
+	>
+		<h2
+			class="section-head"
+			id="sec-plastry"
+		>
+			3 · Plastry i zasoby
+		</h2>
+		<dl class="rows">
+			<div class="row">
+				<dt>Ramki</dt>
+				<dd>
+					<span class="row-meta">czerw <span class="fill-value">{{ comb.frames_brood }}</span></span>
+					<span class="row-meta">miód <span class="fill-value">{{ comb.frames_honey }}</span></span>
+					<span class="row-meta">pierzga <span class="fill-value">{{ comb.frames_pollen }}</span></span>
+					<span class="row-meta">puste <span class="fill-value">{{ comb.frames_empty }}</span></span>
+				</dd>
 			</div>
-			<div>
-				<div
-					style="
-						font-size: 10px;
-						color: var(--ink-light);
-						margin-bottom: 5px;
-						font-family: 'Consolas', monospace;
-						letter-spacing: 0.05em;
-						text-transform: uppercase;
-					"
-				>
-					Zachowanie pszczół
-				</div>
-				<div class="check-group">
-					<div class="check-item"><span class="box"></span> spokojne</div>
-					<div class="check-item"><span class="box"></span> nerwowe</div>
-					<div class="check-item"><span class="box"></span> agresywne</div>
-					<div class="check-item"><span class="box"></span> rojne</div>
-				</div>
+			<div class="row">
+				<dt>Stan plastrów</dt>
+				<dd>
+					{% set condition_pl = {'good': 'dobry', 'old': 'stare plastry', 'needs_replacement': 'potrzeba
+					wymiany'} %}
+					<span class="row-meta"
+						><strong>{{ condition_pl.get(comb.comb_condition, comb.comb_condition) }}</strong></span
+					>
+				</dd>
 			</div>
-		</div>
-	</div>
+		</dl>
+	</section>
 
 	<div class="alert-box">
 		<div class="alert-head">⚠ Zdrowie – sygnały alarmowe</div>
@@ -661,73 +630,91 @@
 			<div class="check-item"><span class="box"></span> woskowica/szkodniki plastra</div>
 			<div class="check-item"><span class="box"></span> brak sygnałów choroby</div>
 		</div>
-		<div
-			class="field-row"
-			style="margin-top: 6px"
-		>
+		<div class="field-row">
 			<label>Osyp na dennicy</label>
 			<div class="line-input"></div>
-			<span style="font-size: 10px; color: var(--ink-light); margin-left: 6px"
-				>(Varroa / 24h, jeśli mierzony)</span
-			>
+			<span class="unit">(Varroa / 24h, jeśli mierzony)</span>
 		</div>
 	</div>
 
-	<div class="section">
-		<div class="section-head">4 · Zasoby i przestrzeń</div>
-		<div class="grid-2">
-			<div>
-				<div
-					style="
-						font-size: 10px;
-						color: var(--ink-light);
-						margin-bottom: 5px;
-						font-family: 'Consolas', monospace;
-						letter-spacing: 0.05em;
-						text-transform: uppercase;
-					"
-				>
-					Zapasy miodu
-				</div>
-				<div
-					class="check-group"
-					style="margin-bottom: 5px"
-				>
-					<div class="check-item"><span class="box"></span> wystarczające</div>
-					<div class="check-item"><span class="box"></span> małe</div>
-					<div class="check-item"><span class="box"></span> brak</div>
-				</div>
-				<div class="field-row">
-					<label>Szacunkowo</label>
-					<div
-						class="line-input"
-						style="max-width: 30px"
-					></div>
-					<span style="font-size: 11px; color: var(--ink-light); margin-left: 3px">kg</span>
-				</div>
+	<!-- Przegląd: Rodzina (siła, zachowanie, zasoby, przestrzeń) -->
+	<section
+		class="section"
+		aria-labelledby="sec-rodzina"
+	>
+		<h2
+			class="section-head"
+			id="sec-rodzina"
+		>
+			4 · Rodzina
+		</h2>
+		<dl class="rows">
+			<div class="row">
+				<dt>Obsiadane</dt>
+				<dd>
+					<span class="row-meta">ramki <span class="fill-value">{{ colony.frames_covered }}</span></span>
+					<span class="row-meta">(siła rodziny)</span>
+				</dd>
 			</div>
-			<div>
-				<div
-					style="
-						font-size: 10px;
-						color: var(--ink-light);
-						margin-bottom: 5px;
-						font-family: 'Consolas', monospace;
-						letter-spacing: 0.05em;
-						text-transform: uppercase;
-					"
-				>
-					Przestrzeń w ulu
-				</div>
-				<div class="check-group">
-					<div class="check-item"><span class="box"></span> wystarczająca</div>
-					<div class="check-item"><span class="box"></span> ciasno – dokładam</div>
-					<div class="check-item"><span class="box"></span> za luźno</div>
-					<div class="check-item"><span class="box"></span> dodano nadstawkę</div>
-				</div>
+			<div class="row">
+				<dt>Zachowanie</dt>
+				<dd>
+					<span class="check-item"
+						><span class="box {% if colony.behavior == 'calm' %}checked{% endif %}"></span> spokojne</span
+					>
+					<span class="check-item"
+						><span class="box {% if colony.behavior == 'nervous' %}checked{% endif %}"></span> nerwowe</span
+					>
+					<span class="check-item"
+						><span class="box {% if colony.behavior == 'aggressive' %}checked{% endif %}"></span>
+						agresywne</span
+					>
+					<span class="check-item"
+						><span class="box {% if colony.behavior == 'swarm_mood' %}checked{% endif %}"></span> nastrój
+						rojowy</span
+					>
+				</dd>
 			</div>
-		</div>
-	</div>
+			<div class="row">
+				<dt>Zapasy miodu</dt>
+				<dd>
+					<span class="check-item"
+						><span class="box {% if colony.honey_stores == 'sufficient' %}checked{% endif %}"></span>
+						wystarczające</span
+					>
+					<span class="check-item"
+						><span class="box {% if colony.honey_stores == 'low' %}checked{% endif %}"></span> małe</span
+					>
+					<span class="check-item"
+						><span class="box {% if colony.honey_stores == 'none' %}checked{% endif %}"></span> brak</span
+					>
+					<span class="row-meta"
+						>~ <span class="fill-value">{{ '%g'|format(colony.honey_kg) }}</span> kg</span
+					>
+				</dd>
+			</div>
+			<div class="row">
+				<dt>Przestrzeń</dt>
+				<dd>
+					<span class="check-item"
+						><span class="box {% if colony.hive_space == 'ok' %}checked{% endif %}"></span>
+						wystarczająca</span
+					>
+					<span class="check-item"
+						><span class="box {% if colony.hive_space == 'tight' %}checked{% endif %}"></span> ciasno</span
+					>
+					<span class="check-item"
+						><span class="box {% if colony.hive_space == 'loose' %}checked{% endif %}"></span> za
+						luźno</span
+					>
+					<span class="check-item"
+						><span class="box {% if colony.hive_space == 'added_super' %}checked{% endif %}"></span>
+						nadstawka</span
+					>
+				</dd>
+			</div>
+		</dl>
+	</section>
 
 	<div class="section">
 		<div class="section-head">5 · Wykonane działania</div>
@@ -769,15 +756,7 @@
 	<div class="footer">
 		<div class="next-field">
 			<label>Następny przegląd:</label>
-			<div
-				style="
-					border-bottom: 1px solid var(--line);
-					width: 100px;
-					height: 16px;
-					display: inline-block;
-					margin-left: 6px;
-				"
-			></div>
+			<div class="line-input"></div>
 		</div>
 		<div>wersja 1.0 · {{ apiary_name }}</div>
 	</div>

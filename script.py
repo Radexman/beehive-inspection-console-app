@@ -225,6 +225,116 @@ def collect_brood() -> dict:
     }
 
 
+# ── dane plastrów (sekcja 3 · Plastry i zasoby) ────────────────────────────────
+def collect_comb() -> dict:
+    """Zbierz dane o plastrach i zasobach zgodne z DTO sekcji 3 szablonu."""
+    frames_brood = int(
+        questionary.text(
+            "Ramki z czerwiem:",
+            default="0",
+            validate=lambda t: t.isdigit() or "Podaj liczbę całkowitą, np. 2",
+        ).ask()
+    )
+
+    frames_honey = int(
+        questionary.text(
+            "Ramki z miodem:",
+            default="0",
+            validate=lambda t: t.isdigit() or "Podaj liczbę całkowitą, np. 2",
+        ).ask()
+    )
+
+    frames_pollen = int(
+        questionary.text(
+            "Ramki z pierzgą:",
+            default="0",
+            validate=lambda t: t.isdigit() or "Podaj liczbę całkowitą, np. 2",
+        ).ask()
+    )
+
+    frames_empty = int(
+        questionary.text(
+            "Ramki pustego plastra do zasiedlenia:",
+            default="0",
+            validate=lambda t: t.isdigit() or "Podaj liczbę całkowitą, np. 2",
+        ).ask()
+    )
+
+    comb_condition = questionary.select(
+        "Stan plastrów",
+        choices=[
+            questionary.Choice("Dobry", value="good"),
+            questionary.Choice("Stare plastry", value="old"),
+            questionary.Choice("Potrzeba wymiany", value="needs_replacement"),
+        ],
+    ).ask()
+
+    return {
+        "frames_brood": frames_brood,
+        "frames_honey": frames_honey,
+        "frames_pollen": frames_pollen,
+        "frames_empty": frames_empty,
+        "comb_condition": comb_condition,
+    }
+
+
+# ── dane rodziny (sekcja 4 · Rodzina) ──────────────────────────────────────────
+def collect_colony() -> dict:
+    """Zbierz dane o sile i kondycji rodziny zgodne z DTO sekcji 4 szablonu."""
+    frames_covered = int(
+        questionary.text(
+            "Ramki obsiadane przez pszczoły (siła rodziny):",
+            default="0",
+            validate=lambda t: t.isdigit() or "Podaj liczbę całkowitą, np. 2",
+        ).ask()
+    )
+
+    behavior = questionary.select(
+        "Zachowanie pszczół:",
+        choices=[
+            questionary.Choice("Spokojne", value="calm"),
+            questionary.Choice("Nerwowe", value="nervous"),
+            questionary.Choice("Agresywne", value="aggressive"),
+            questionary.Choice("Nastrój rojowy", value="swarm_mood"),
+        ],
+    ).ask()
+
+    honey_stores = questionary.select(
+        "Zapasy miodu:",
+        choices=[
+            questionary.Choice("Wystarczające", value="sufficient"),
+            questionary.Choice("Małe", value="low"),
+            questionary.Choice("Brak", value="none"),
+        ],
+    ).ask()
+
+    honey_kg = float(
+        questionary.text(
+            "Szacunkowo miodu (kg):",
+            default="0",
+            validate=lambda t: _is_float(t) or "Podaj liczbę, np. 5 lub 2.5",
+        ).ask()
+    )
+
+    hive_space = questionary.select(
+        "Przestrzeń w ulu:",
+        choices=[
+            questionary.Choice("Wystarczająca", value="ok"),
+            questionary.Choice("Ciasno – dokładam", value="tight"),
+            questionary.Choice("Za luźno", value="loose"),
+            questionary.Choice("Dodano nadstawkę", value="added_super"),
+        ],
+    ).ask()
+
+    return {
+        "frames_covered": frames_covered,
+        "behavior": behavior,
+        "honey_stores": honey_stores,
+        "honey_kg": honey_kg,
+        "hive_space": hive_space,
+    }
+
+
 # ── 1 · nowy przegląd (PDF) ────────────────────────────────────────────────────
 def new_inspection() -> None:
     """Wygeneruj PDF przeglądu na podstawie zapisanego profilu."""
@@ -246,6 +356,8 @@ def new_inspection() -> None:
     inspection_number = questionary.text("Podaj numer inspekcji:").ask()
     queen = collect_queen()
     brood = collect_brood()
+    comb = collect_comb()
+    colony = collect_colony()
 
     html_filled = template.render(
         apiary_name=profile["apiary_name"],
@@ -258,6 +370,8 @@ def new_inspection() -> None:
         inspection_date=today,
         queen=queen,
         brood=brood,
+        comb=comb,
+        colony=colony,
     )
 
     # filename = f"Przegląd - {profile['apiary_name']} - {today}.pdf"
