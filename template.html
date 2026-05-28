@@ -39,7 +39,6 @@
 	.weather-field dt,
 	.row > dt,
 	.field-row label,
-	.action-label,
 	.dot-num,
 	.next-field label,
 	.footer {
@@ -53,7 +52,6 @@
 	.row > dt,
 	.row-meta,
 	.field-row label,
-	.action-label,
 	.dot-num,
 	.next-field label,
 	.footer {
@@ -124,7 +122,7 @@
 		background: var(--fill);
 		border-radius: 5px;
 		padding: 10px 14px;
-		margin-bottom: 14px;
+		margin-bottom: 22px;
 	}
 
 	.weather-grid {
@@ -154,18 +152,18 @@
 	}
 
 	.section {
-		margin-bottom: 12px;
+		margin-bottom: 22px;
 	}
 
 	.section-head {
 		display: flex;
 		align-items: center;
 		gap: 6px;
-		font-size: 9px;
+		font-size: 11px;
 		font-weight: 600;
 		letter-spacing: 0.14em;
 		color: var(--accent);
-		margin-bottom: 7px;
+		margin-bottom: 9px;
 	}
 
 	.section-head::after {
@@ -211,7 +209,6 @@
 		content: '✓';
 	}
 
-	/* Filled amber marker for observed health issues (an alarm, not a 'good' check) */
 	.box.warn {
 		background: var(--warn);
 		border-color: var(--warn);
@@ -277,7 +274,6 @@
 		min-width: 30px;
 	}
 
-	/* Collected value sitting on a fill-in underline (also writable by hand) */
 	.fill-value {
 		display: inline-block;
 		min-width: 24px;
@@ -297,6 +293,7 @@
 		border-radius: 50%;
 		border: 1px solid var(--line);
 		display: inline-block;
+		flex: none;
 	}
 
 	.dot.filled {
@@ -316,7 +313,7 @@
 		border-left: 3px solid var(--warn);
 		border-radius: 4px;
 		padding: 8px 12px;
-		margin-bottom: 12px;
+		margin-bottom: 22px;
 	}
 
 	.alert-head {
@@ -335,12 +332,11 @@
 		margin-top: 6px;
 	}
 
-	/* "All clear" line shown when no health issues were observed */
 	.health-clear {
 		display: flex;
 		align-items: center;
 		gap: 8px;
-		margin-bottom: 12px;
+		margin-bottom: 22px;
 		font-size: 12px;
 		color: var(--accent);
 	}
@@ -377,23 +373,9 @@
 		height: 1px;
 	}
 
-	.actions-row {
-		display: flex;
-		flex-direction: column;
-		gap: 4px;
-	}
-
-	.action-item {
-		display: flex;
-		align-items: center;
-		gap: 8px;
+	.actions-inline {
 		font-size: 12px;
-	}
-
-	.action-label {
-		font-size: 10px;
-		letter-spacing: 0.04em;
-		min-width: 130px;
+		line-height: 1.5;
 	}
 
 	.footer {
@@ -493,6 +475,8 @@
 		</dl>
 	</section>
 
+	{% set ns = namespace(n=0) %}
+
 	<!-- Przegląd: Matka Pszczela -->
 	<section
 		class="section"
@@ -502,7 +486,7 @@
 			class="section-head"
 			id="sec-matka"
 		>
-			1 · Matka
+			{% set ns.n = ns.n + 1 %}{{ ns.n }} · Matka
 		</h2>
 		<dl class="rows">
 			<div class="row">
@@ -571,7 +555,7 @@
 			class="section-head"
 			id="sec-czerw"
 		>
-			2 · Czerw
+			{% set ns.n = ns.n + 1 %}{{ ns.n }} · Czerw
 		</h2>
 		<dl class="rows">
 			<div class="row">
@@ -615,7 +599,7 @@
 			class="section-head"
 			id="sec-rodzina"
 		>
-			3 · Rodzina
+			{% set ns.n = ns.n + 1 %}{{ ns.n }} · Rodzina
 		</h2>
 		<dl class="rows">
 			<div class="row">
@@ -694,7 +678,7 @@
 			class="section-head"
 			id="sec-plastry"
 		>
-			4 · Plastry i zasoby
+			{% set ns.n = ns.n + 1 %}{{ ns.n }} · Plastry i zasoby
 		</h2>
 		<dl class="rows">
 			<div class="row">
@@ -719,31 +703,23 @@
 		</dl>
 	</section>
 
-	<div class="section">
-		<div class="section-head">5 · Wykonane działania</div>
-		<div class="actions-row">
-			<div class="action-item">
-				<span class="box"></span><span class="action-label">Dokarmianie</span>
-				<div class="line-input"></div>
-			</div>
-			<div class="action-item">
-				<span class="box"></span><span class="action-label">Leczenie (preparat)</span>
-				<div class="line-input"></div>
-			</div>
-			<div class="action-item">
-				<span class="box"></span><span class="action-label">Wymiana plastrów</span>
-				<div class="line-input"></div>
-			</div>
-			<div class="action-item">
-				<span class="box"></span><span class="action-label">Odsklepowanie miodu</span>
-				<div class="line-input"></div>
-			</div>
-			<div class="action-item">
-				<span class="box"></span><span class="action-label">Inne</span>
-				<div class="line-input"></div>
-			</div>
+	{% if actions.performed and (actions.selected or actions.other) %}
+	<section
+		class="section"
+		aria-labelledby="sec-dzialania"
+	>
+		<h2
+			class="section-head"
+			id="sec-dzialania"
+		>
+			{% set ns.n = ns.n + 1 %}{{ ns.n }} · Wykonane działania
+		</h2>
+		<div class="actions-inline">
+			{{ actions.selected | map('action_label') | join(', ') }}{% if actions.other %}, {{ actions.other }}{% endif
+			%}
 		</div>
-	</div>
+	</section>
+	{% endif %}
 
 	<!-- Przegląd: Zdrowie rodziny -->
 	{% if health.issues_observed and (health.conditions or health.other) %}
@@ -767,8 +743,16 @@
 	<div class="health-clear"><span class="check-ok">✓</span> Brak sygnałów choroby</div>
 	{% endif %}
 
-	<div class="section">
-		<div class="section-head">6 · Uwagi / notatki swobodne</div>
+	<section
+		class="section"
+		aria-labelledby="sec-uwagi"
+	>
+		<h2
+			class="section-head"
+			id="sec-uwagi"
+		>
+			{% set ns.n = ns.n + 1 %}{{ ns.n }} · Uwagi / notatki swobodne
+		</h2>
 		<div class="notes-area">
 			<div class="notes-lines">
 				<div class="note-line"></div>
@@ -776,7 +760,7 @@
 				<div class="note-line"></div>
 			</div>
 		</div>
-	</div>
+	</section>
 
 	<div class="footer">
 		<div class="next-field">

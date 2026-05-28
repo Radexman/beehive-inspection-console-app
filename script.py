@@ -7,6 +7,7 @@ import requests
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML
 
+from actions import ACTION_LABELS, ACTIONS
 from health_conditions import HEALTH_CONDITIONS, HEALTH_LABELS
 from weather_codes import WEATHER_CODES
 
@@ -354,7 +355,8 @@ def collect_health() -> dict:
     conditions = questionary.checkbox(
         "Zaznacz zaobserwowane dolegliwości:",
         choices=[
-            questionary.Choice(HEALTH_LABELS[key], value=key) for key in HEALTH_CONDITIONS
+            questionary.Choice(HEALTH_LABELS[key], value=key)
+            for key in HEALTH_CONDITIONS
         ],
     ).ask()
 
@@ -380,6 +382,28 @@ def collect_health() -> dict:
     }
 
 
+# ── wykonane działania (sekcja 5 · Wykonane działania) ─────────────────────────
+def collect_actions() -> dict:
+    """Zbierz wykonane działania; listę zbieramy tylko, gdy coś wykonano."""
+    performed = questionary.confirm(
+        "Czy wykonano jakieś działania?", default=False
+    ).ask()
+
+    if not performed:
+        return {"performed": False, "selected": [], "other": ""}
+
+    selected = questionary.checkbox(
+        "Zaznacz wykonane działania:",
+        choices=[questionary.Choice(ACTION_LABELS[key], value=key) for key in ACTIONS],
+    ).ask()
+
+    other = ""
+    if "other" in selected:
+        other = questionary.text("Opisz inne działania:").ask()
+
+    return {"performed": performed, "selected": selected, "other": other}
+
+
 # ── 1 · nowy przegląd (PDF) ────────────────────────────────────────────────────
 def new_inspection() -> None:
     """Wygeneruj PDF przeglądu na podstawie zapisanego profilu."""
@@ -395,6 +419,7 @@ def new_inspection() -> None:
 
     env = Environment(loader=FileSystemLoader(str(BASE_DIR)))
     env.filters["health_label"] = lambda key: HEALTH_LABELS.get(key, key)
+    env.filters["action_label"] = lambda key: ACTION_LABELS.get(key, key)
     today = date.today().strftime("%Y-%m-%d")
     template = env.get_template("template.html")
 
@@ -405,6 +430,7 @@ def new_inspection() -> None:
     comb = collect_comb()
     colony = collect_colony()
     health = collect_health()
+    actions = collect_actions()
 
     html_filled = template.render(
         apiary_name=profile["apiary_name"],
@@ -420,6 +446,7 @@ def new_inspection() -> None:
         comb=comb,
         colony=colony,
         health=health,
+        actions=actions,
     )
 
     # filename = f"Przegląd - {profile['apiary_name']} - {today}.pdf"
