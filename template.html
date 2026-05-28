@@ -40,7 +40,6 @@
 	.row > dt,
 	.field-row label,
 	.dot-num,
-	.next-field label,
 	.footer {
 		font-family: 'Consolas', monospace;
 	}
@@ -53,7 +52,6 @@
 	.row-meta,
 	.field-row label,
 	.dot-num,
-	.next-field label,
 	.footer {
 		color: var(--ink-light);
 	}
@@ -267,13 +265,6 @@
 		min-width: 70px;
 	}
 
-	.line-input {
-		flex: 1;
-		border-bottom: 1px solid var(--line);
-		height: 18px;
-		min-width: 30px;
-	}
-
 	.fill-value {
 		display: inline-block;
 		min-width: 24px;
@@ -373,6 +364,12 @@
 		height: 1px;
 	}
 
+	.notes-text {
+		font-size: 12px;
+		line-height: 1.6;
+		white-space: pre-line;
+	}
+
 	.actions-inline {
 		font-size: 12px;
 		line-height: 1.5;
@@ -380,31 +377,13 @@
 
 	.footer {
 		display: flex;
-		justify-content: space-between;
+		justify-content: flex-end;
 		align-items: flex-end;
 		border-top: 1px solid var(--line);
 		padding-top: 8px;
 		margin-top: 4px;
 		font-size: 9px;
 		letter-spacing: 0.05em;
-	}
-
-	.next-field {
-		display: flex;
-		align-items: center;
-		gap: 6px;
-		font-size: 12px;
-	}
-
-	.next-field label {
-		font-size: 10px;
-		letter-spacing: 0.04em;
-	}
-
-	.next-field .line-input {
-		flex: none;
-		width: 100px;
-		height: 16px;
 	}
 
 	@media print {
@@ -721,6 +700,29 @@
 	</section>
 	{% endif %}
 
+	<section
+		class="section"
+		aria-labelledby="sec-uwagi"
+	>
+		<h2
+			class="section-head"
+			id="sec-uwagi"
+		>
+			{% set ns.n = ns.n + 1 %}{{ ns.n }} · Uwagi / notatki swobodne
+		</h2>
+		<div class="notes-area">
+			{% if notes %}
+			<div class="notes-text">{{ notes }}</div>
+			{% else %}
+			<div class="notes-lines">
+				<div class="note-line"></div>
+				<div class="note-line"></div>
+				<div class="note-line"></div>
+			</div>
+			{% endif %}
+		</div>
+	</section>
+
 	<!-- Przegląd: Zdrowie rodziny -->
 	{% if health.issues_observed and (health.conditions or health.other) %}
 	<div class="alert-box">
@@ -743,30 +745,7 @@
 	<div class="health-clear"><span class="check-ok">✓</span> Brak sygnałów choroby</div>
 	{% endif %}
 
-	<section
-		class="section"
-		aria-labelledby="sec-uwagi"
-	>
-		<h2
-			class="section-head"
-			id="sec-uwagi"
-		>
-			{% set ns.n = ns.n + 1 %}{{ ns.n }} · Uwagi / notatki swobodne
-		</h2>
-		<div class="notes-area">
-			<div class="notes-lines">
-				<div class="note-line"></div>
-				<div class="note-line"></div>
-				<div class="note-line"></div>
-			</div>
-		</div>
-	</section>
-
 	<div class="footer">
-		<div class="next-field">
-			<label>Następny przegląd:</label>
-			<div class="line-input"></div>
-		</div>
 		<div>wersja 1.0 · {{ apiary_name }}</div>
 	</div>
 </div>

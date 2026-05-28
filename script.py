@@ -431,6 +431,7 @@ def new_inspection() -> None:
     colony = collect_colony()
     health = collect_health()
     actions = collect_actions()
+    notes = questionary.text("Uwagi / notatki:").ask()
 
     html_filled = template.render(
         apiary_name=profile["apiary_name"],
@@ -447,6 +448,7 @@ def new_inspection() -> None:
         colony=colony,
         health=health,
         actions=actions,
+        notes=notes,
     )
 
     # filename = f"Przegląd - {profile['apiary_name']} - {today}.pdf"
