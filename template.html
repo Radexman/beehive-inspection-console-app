@@ -56,7 +56,6 @@
 	.action-label,
 	.dot-num,
 	.next-field label,
-	.unit,
 	.footer {
 		color: var(--ink-light);
 	}
@@ -212,6 +211,12 @@
 		content: '✓';
 	}
 
+	/* Filled amber marker for observed health issues (an alarm, not a 'good' check) */
+	.box.warn {
+		background: var(--warn);
+		border-color: var(--warn);
+	}
+
 	.rows {
 		display: flex;
 		flex-direction: column;
@@ -272,11 +277,6 @@
 		min-width: 30px;
 	}
 
-	.unit {
-		font-size: 10px;
-		margin-left: 4px;
-	}
-
 	/* Collected value sitting on a fill-in underline (also writable by hand) */
 	.fill-value {
 		display: inline-block;
@@ -333,6 +333,28 @@
 
 	.alert-box .field-row {
 		margin-top: 6px;
+	}
+
+	/* "All clear" line shown when no health issues were observed */
+	.health-clear {
+		display: flex;
+		align-items: center;
+		gap: 8px;
+		margin-bottom: 12px;
+		font-size: 12px;
+		color: var(--accent);
+	}
+
+	.check-ok {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 16px;
+		height: 16px;
+		border-radius: 3px;
+		background: var(--accent);
+		color: #fff;
+		font-size: 11px;
 	}
 
 	.notes-area {
@@ -584,59 +606,6 @@
 		</dl>
 	</section>
 
-	<!-- Przegląd: Plastry i zasoby -->
-	<section
-		class="section"
-		aria-labelledby="sec-plastry"
-	>
-		<h2
-			class="section-head"
-			id="sec-plastry"
-		>
-			3 · Plastry i zasoby
-		</h2>
-		<dl class="rows">
-			<div class="row">
-				<dt>Ramki</dt>
-				<dd>
-					<span class="row-meta">czerw <span class="fill-value">{{ comb.frames_brood }}</span></span>
-					<span class="row-meta">miód <span class="fill-value">{{ comb.frames_honey }}</span></span>
-					<span class="row-meta">pierzga <span class="fill-value">{{ comb.frames_pollen }}</span></span>
-					<span class="row-meta">puste <span class="fill-value">{{ comb.frames_empty }}</span></span>
-				</dd>
-			</div>
-			<div class="row">
-				<dt>Stan plastrów</dt>
-				<dd>
-					{% set condition_pl = {'good': 'dobry', 'old': 'stare plastry', 'needs_replacement': 'potrzeba
-					wymiany'} %}
-					<span class="row-meta"
-						><strong>{{ condition_pl.get(comb.comb_condition, comb.comb_condition) }}</strong></span
-					>
-				</dd>
-			</div>
-		</dl>
-	</section>
-
-	<div class="alert-box">
-		<div class="alert-head">⚠ Zdrowie – sygnały alarmowe</div>
-		<div class="check-group">
-			<div class="check-item"><span class="box"></span> deformacje skrzydeł (DWV)</div>
-			<div class="check-item"><span class="box"></span> czerw dziurkowany / zagnity</div>
-			<div class="check-item"><span class="box"></span> biegunka na denicy</div>
-			<div class="check-item"><span class="box"></span> roztocza Varroa widoczne</div>
-			<div class="check-item"><span class="box"></span> grzybica wapienna</div>
-			<div class="check-item"><span class="box"></span> pełzaczek pszczeli</div>
-			<div class="check-item"><span class="box"></span> woskowica/szkodniki plastra</div>
-			<div class="check-item"><span class="box"></span> brak sygnałów choroby</div>
-		</div>
-		<div class="field-row">
-			<label>Osyp na dennicy</label>
-			<div class="line-input"></div>
-			<span class="unit">(Varroa / 24h, jeśli mierzony)</span>
-		</div>
-	</div>
-
 	<!-- Przegląd: Rodzina (siła, zachowanie, zasoby, przestrzeń) -->
 	<section
 		class="section"
@@ -646,7 +615,7 @@
 			class="section-head"
 			id="sec-rodzina"
 		>
-			4 · Rodzina
+			3 · Rodzina
 		</h2>
 		<dl class="rows">
 			<div class="row">
@@ -716,6 +685,40 @@
 		</dl>
 	</section>
 
+	<!-- Przegląd: Plastry i zasoby -->
+	<section
+		class="section"
+		aria-labelledby="sec-plastry"
+	>
+		<h2
+			class="section-head"
+			id="sec-plastry"
+		>
+			4 · Plastry i zasoby
+		</h2>
+		<dl class="rows">
+			<div class="row">
+				<dt>Ramki</dt>
+				<dd>
+					<span class="row-meta">czerw <span class="fill-value">{{ comb.frames_brood }}</span></span>
+					<span class="row-meta">miód <span class="fill-value">{{ comb.frames_honey }}</span></span>
+					<span class="row-meta">pierzga <span class="fill-value">{{ comb.frames_pollen }}</span></span>
+					<span class="row-meta">puste <span class="fill-value">{{ comb.frames_empty }}</span></span>
+				</dd>
+			</div>
+			<div class="row">
+				<dt>Stan plastrów</dt>
+				<dd>
+					{% set condition_pl = {'good': 'dobry', 'old': 'stare plastry', 'needs_replacement': 'potrzeba
+					wymiany'} %}
+					<span class="row-meta"
+						><strong>{{ condition_pl.get(comb.comb_condition, comb.comb_condition) }}</strong></span
+					>
+				</dd>
+			</div>
+		</dl>
+	</section>
+
 	<div class="section">
 		<div class="section-head">5 · Wykonane działania</div>
 		<div class="actions-row">
@@ -741,6 +744,28 @@
 			</div>
 		</div>
 	</div>
+
+	<!-- Przegląd: Zdrowie rodziny -->
+	{% if health.issues_observed and (health.conditions or health.other) %}
+	<div class="alert-box">
+		<div class="alert-head">⚠ Zdrowie – sygnały alarmowe</div>
+		<div class="check-group">
+			{% for condition in health.conditions %}
+			<div class="check-item"><span class="box warn"></span> {{ condition | health_label }}</div>
+			{% endfor %} {% if health.other %}
+			<div class="check-item"><span class="box warn"></span> {{ health.other }}</div>
+			{% endif %}
+		</div>
+		{% if 'varroa' in health.conditions %}
+		<div class="field-row">
+			<label>Osyp na dennicy</label>
+			<span class="row-meta"><strong>{{ health.varroa_drop_count }}</strong> roztoczy / 24h</span>
+		</div>
+		{% endif %}
+	</div>
+	{% else %}
+	<div class="health-clear"><span class="check-ok">✓</span> Brak sygnałów choroby</div>
+	{% endif %}
 
 	<div class="section">
 		<div class="section-head">6 · Uwagi / notatki swobodne</div>

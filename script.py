@@ -7,6 +7,7 @@ import requests
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML
 
+from health_conditions import HEALTH_CONDITIONS, HEALTH_LABELS
 from weather_codes import WEATHER_CODES
 
 # ── ścieżki ──────────────────────────────────────────────────────────────────
@@ -335,6 +336,50 @@ def collect_colony() -> dict:
     }
 
 
+# ── dane zdrowotne (sekcja Zdrowie) ────────────────────────────────────────────
+def collect_health() -> dict:
+    """Zbierz sygnały zdrowotne; szczegóły zbieramy tylko, gdy coś zauważono."""
+    issues_observed = questionary.confirm(
+        "Czy zaobserwowałeś coś niepokojącego?", default=False
+    ).ask()
+
+    if not issues_observed:
+        return {
+            "issues_observed": False,
+            "conditions": [],
+            "other": "",
+            "varroa_drop_count": 0,
+        }
+
+    conditions = questionary.checkbox(
+        "Zaznacz zaobserwowane dolegliwości:",
+        choices=[
+            questionary.Choice(HEALTH_LABELS[key], value=key) for key in HEALTH_CONDITIONS
+        ],
+    ).ask()
+
+    varroa_drop_count = 0
+    if "varroa" in conditions:
+        varroa_drop_count = int(
+            questionary.text(
+                "Osyp roztoczy Varroa na dennicy (szt./24h):",
+                default="0",
+                validate=lambda t: t.isdigit() or "Podaj liczbę całkowitą, np. 12",
+            ).ask()
+        )
+
+    other = ""
+    if "other" in conditions:
+        other = questionary.text("Opisz inne objawy:").ask()
+
+    return {
+        "issues_observed": issues_observed,
+        "conditions": conditions,
+        "other": other,
+        "varroa_drop_count": varroa_drop_count,
+    }
+
+
 # ── 1 · nowy przegląd (PDF) ────────────────────────────────────────────────────
 def new_inspection() -> None:
     """Wygeneruj PDF przeglądu na podstawie zapisanego profilu."""
@@ -349,6 +394,7 @@ def new_inspection() -> None:
         weather = get_weather(location["lat"], location["lon"])
 
     env = Environment(loader=FileSystemLoader(str(BASE_DIR)))
+    env.filters["health_label"] = lambda key: HEALTH_LABELS.get(key, key)
     today = date.today().strftime("%Y-%m-%d")
     template = env.get_template("template.html")
 
@@ -358,6 +404,7 @@ def new_inspection() -> None:
     brood = collect_brood()
     comb = collect_comb()
     colony = collect_colony()
+    health = collect_health()
 
     html_filled = template.render(
         apiary_name=profile["apiary_name"],
@@ -372,6 +419,7 @@ def new_inspection() -> None:
         brood=brood,
         comb=comb,
         colony=colony,
+        health=health,
     )
 
     # filename = f"Przegląd - {profile['apiary_name']} - {today}.pdf"
